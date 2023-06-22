@@ -16,20 +16,26 @@ const AppLayout = ({ children }) => {
 
   return (
     <div>
-      <Menu mode="horizontal">
-        <Menu.Item>
-          <Link href="/"><a>노드버드</a></Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/profile"><a>프로필</a></Link>
-        </Menu.Item>
-        <Menu.Item>
-          <SearchInput enterButton />
-        </Menu.Item>
-        <Menu.Item>
-          <Link href="/signup"><a>회원가입</a></Link>
-        </Menu.Item>
-      </Menu>
+      <Menu
+        mode="horizontal"
+        items={[
+          {
+            label: <Link key="Home" href="/"><a>노드버드</a></Link>,
+            key: "Home",
+          },
+          {
+            label: <Link key="profile" href="/profile"><a>프로필</a></Link>,
+            key: "profile",
+          },
+          {
+            label: <SearchInput key="search" enterButton />,
+            key: "search",
+          },
+          {
+            label: <Link href="/signup"><a>회원가입</a></Link>,
+            key: "signup"
+          },
+        ]} />
       {/* gutter: column간의 간격 xs: 모바일, md: 작은 데탑 */}
       <Row gutter={8}>
         <Col xs={24} md={6} > {/* 한줄의 24등분중에 모바일은 100% 차지 / 데탑은 25% 차지한다는 뜻*/}
