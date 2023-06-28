@@ -9,11 +9,12 @@ const SearchInput = styled(Input.Search)`
   vertical-align: middle;
 `;
 
-import UserProfile from '../components/UserProfile';
 import LoginForm from '../components/LoginForm';
+import UserProfile from '../components/UserProfile';
 
 const AppLayout = ({ children }) => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn); // isLoggedIn이 바뀌면 이 컴포넌트 리렌더링됨
+
   return (
     <>
       <Menu
