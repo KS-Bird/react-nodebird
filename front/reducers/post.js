@@ -8,9 +8,9 @@ export const initialState = {
     },
     content: '첫번째 게시글 #해시태그 #익스프레스',
     Images: [{
-      src: 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_92x30dp.png',
+      src: 'https://edit.org/images/cat/book-covers-big-2019101610.jpg',
     }, {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg',
+      src: 'https://kr-mb.theepochtimes.com/assets/uploads/2020/09/Mountain-Bluebird-34540-700x420.jpg',
     }, {
       src: 'https://kr-mb.theepochtimes.com/assets/uploads/2020/09/Mountain-Bluebird-34540-700x420.jpg',
     }],
