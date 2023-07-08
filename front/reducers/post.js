@@ -40,7 +40,7 @@ const dummpyPost = {
     id: 1,
     nickname: '제로초',
   },
-  content: '더미데이터',
+  content: '더미데이터 #더미#더미##더미',
   Images: [],
   Comments: [],
 }
