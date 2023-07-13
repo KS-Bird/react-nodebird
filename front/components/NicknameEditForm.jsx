@@ -9,6 +9,6 @@ const NicknameEditForm = () => {
       <Input.Search addonBefore="닉네임" enterButton="수정" style={style} />
     </Form>
   );
-}
+};
 
 export default NicknameEditForm;

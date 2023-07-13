@@ -2,14 +2,14 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Slick from 'react-slick';
 
-import { Overlay, Header, CloseBtn, SlickWrapper, ImgWrapper, Indicator, Global } from './styles'
+import { Overlay, Header, CloseBtn, SlickWrapper, ImgWrapper, Indicator, Global } from './styles';
 
 const ImagesZoom = ({ images, onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   return (
     <Overlay>
-      <Global /> {/* 전역에 적용이 됨. 기존 스타일 덮어씌움*/}
+      <Global /> {/* 전역에 적용이 됨. 기존 스타일 덮어씌움 */}
       <Header>
         <h1>상세 이미지</h1>
         <CloseBtn onClick={onClose}>X</CloseBtn>
@@ -39,7 +39,7 @@ const ImagesZoom = ({ images, onClose }) => {
       </SlickWrapper>
     </Overlay>
   );
-}
+};
 
 ImagesZoom.propTypes = {
   images: PropTypes.arrayOf(PropTypes.object).isRequired,

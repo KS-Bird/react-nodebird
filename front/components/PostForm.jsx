@@ -7,8 +7,8 @@ import { addPost } from '../reducers/post';
 
 const PostForm = () => {
   const dispatch = useDispatch();
-  const addPostDone = useSelector(state => state.post.addPostDone);
-  const imagePaths = useSelector(state => state.post.imagePaths);
+  const addPostDone = useSelector((state) => state.post.addPostDone);
+  const imagePaths = useSelector((state) => state.post.imagePaths);
 
   const [text, onChangeText, setText] = useInput('');
 
@@ -24,7 +24,7 @@ const PostForm = () => {
   }, [imageInput.current]);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost({ text, }));
+    dispatch(addPost({ text }));
   }, [text]);
 
   return (
@@ -36,7 +36,7 @@ const PostForm = () => {
         placeholder="어떤 신기한 일이 있었나요?"
       />
       <div>
-        <input type="file" multiple ref={imageInput} style={{ display: "none" }} />
+        <input type="file" multiple ref={imageInput} style={{ display: 'none' }} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button type="primary" style={{ float: 'right' }} htmlType="submit">짹짹</Button>
       </div>
@@ -50,6 +50,6 @@ const PostForm = () => {
       </div>
     </Form>
   );
-}
+};
 
 export default PostForm;

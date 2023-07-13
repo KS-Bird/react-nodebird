@@ -19,6 +19,6 @@ const rootReducer = combineReducers({ // 쪼갠 리듀서를 합친다
   // user와 post의 initialState는 combineReducers가 알아서 합쳐준다
   user,
   post,
-})
+});
 
 export default rootReducer;

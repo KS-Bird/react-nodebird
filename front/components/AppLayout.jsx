@@ -1,16 +1,15 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Row, Col } from 'antd';
-import { } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+
+import LoginForm from './LoginForm';
+import UserProfile from './UserProfile';
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
 `;
-
-import LoginForm from '../components/LoginForm';
-import UserProfile from '../components/UserProfile';
 
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
@@ -34,24 +33,25 @@ const AppLayout = ({ children }) => {
           },
           {
             label: <Link href="/signup"><a>회원가입</a></Link>,
-            key: "signup"
+            key: "signup",
           },
-        ]} />
+        ]}
+      />
       {/* gutter: column간의 간격 xs: 모바일, md: 작은 데탑 */}
       <Row gutter={8}>
-        <Col xs={24} md={6} > {/* 한줄의 24등분중에 모바일은 100% 차지 / 데탑은 25% 차지한다는 뜻*/}
+        <Col xs={24} md={6}> {/* 한줄의 24등분중에 모바일은 100% 차지 / 데탑은 25% 차지한다는 뜻 */}
           {me ? <UserProfile /> : <LoginForm />}
         </Col>
-        <Col xs={24} md={12} >
+        <Col xs={24} md={12}>
           {children}
         </Col>
-        <Col xs={24} md={6} >
+        <Col xs={24} md={6}>
           <a href='https://tagg129.tistory.com' target='_blank' rel='noreferrer noopener'>Made by Kyuseok Park</a>
         </Col>
       </Row>
     </>
   );
-}
+};
 
 AppLayout.propTypes = { // props 타입 검사
   children: PropTypes.node.isRequired, // children은 node라는 타입 // return 안에 들어갈 수 있는 모든게 node

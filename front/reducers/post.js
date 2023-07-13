@@ -30,7 +30,7 @@ export const initialState = {
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
-}
+};
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUSET';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -59,8 +59,7 @@ const dummpyPost = {
   content: '더미데이터 #더미#더미##더미',
   Images: [],
   Comments: [],
-}
-
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -106,6 +105,6 @@ const reducer = (state = initialState, action) => {
     default:
       return state;
   }
-}
+};
 
 export default reducer;

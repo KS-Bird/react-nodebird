@@ -3,7 +3,7 @@ import { applyMiddleware, createStore, compose } from 'redux';
 import { composeWithDevTools } from '@redux-devtools/extension';
 import createSageMiddleware from 'redux-saga';
 
-import reducer from '../reducers'
+import reducer from '../reducers';
 import rootSaga from '../sagas';
 
 const configureStore = () => {
@@ -15,11 +15,10 @@ const configureStore = () => {
   const store = createStore(reducer, enhancer);
   store.sagaTask = sageMiddleware.run(rootSaga);
   return store;
-}
+};
 
 const wrapper = createWrapper(configureStore, {
   debug: process.env.NODE_ENV === 'development', // debug true시 더 자세한 설명이 나오게 해줌
 });
 
 export default wrapper;
-

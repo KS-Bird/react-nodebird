@@ -9,7 +9,7 @@ import { ADD_COMMENT_REQUEST } from '../reducers/post';
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
   const id = useSelector((state) => state.user.me?.id);
-  const { addCommentDone } = useSelector(state => state.post)
+  const { addCommentDone } = useSelector((state) => state.post);
 
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
 
@@ -34,13 +34,13 @@ const CommentForm = ({ post }) => {
         <Button style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1 }} type="primary" htmlType="submit">삐약</Button>
       </Form.Item>
     </Form>
-  )
-}
+  );
+};
 
 CommentForm.propTypes = {
   post: PropTypes.shape({
     id: PropTypes.number,
   }).isRequired,
-}
+};
 
 export default CommentForm;

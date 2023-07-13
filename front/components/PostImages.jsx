@@ -26,8 +26,8 @@ const PostImages = ({ images }) => {
     return (
       <>
         <div>
-          <img role="presentation" style={{ width: "50%", display: 'inline-block' }} src={images[0].src} alt={images[0].src} onClick={onZoom} />
-          <img role="presentation" style={{ width: "50%", display: 'inline-block' }} src={images[1].src} alt={images[1].src} onClick={onZoom} />
+          <img role="presentation" style={{ width: '50%', display: 'inline-block' }} src={images[0].src} alt={images[0].src} onClick={onZoom} />
+          <img role="presentation" style={{ width: '50%', display: 'inline-block' }} src={images[1].src} alt={images[1].src} onClick={onZoom} />
         </div>
         {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
       </>
@@ -36,7 +36,7 @@ const PostImages = ({ images }) => {
   return (
     <>
       <div style={{ position: 'relative' }}>
-        <img role="presentation" style={{ width: "50%", display: 'inline-block' }} src={images[0].src} alt={images[0].src} onClick={onZoom} />
+        <img role="presentation" style={{ width: '50%', display: 'inline-block' }} src={images[0].src} alt={images[0].src} onClick={onZoom} />
         <div
           role="presentation"
           onClick={onZoom}
@@ -53,24 +53,23 @@ const PostImages = ({ images }) => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <PlusOutlined />
             {images.length - 1}개의 사진 더보기
           </div>
         </div>
-      </div >
-      {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />
-      }
+      </div>
+      {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
     </>
   );
-}
+};
 
 PostImages.propTypes = {
   images: PropTypes.arrayOf(PropTypes.shape({
     src: PropTypes.string,
   })).isRequired,
-}
+};
 
 export default PostImages;

@@ -12,7 +12,7 @@ const PostCardContent = ({ postData }) => {
       })}
     </>
   );
-}
+};
 
 PostCardContent.propTypes = {
   postData: PropTypes.string.isRequired,

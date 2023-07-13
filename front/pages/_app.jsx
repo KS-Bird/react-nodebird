@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import wrapper from '../store/configureStore';
 import { Provider } from 'react-redux';
+import wrapper from '../store/configureStore';
 
 // _app.jsx 라는 이름의 파일은 모든 파일에 공통된다
 
@@ -15,13 +15,13 @@ const NodeBird = ({ Component, ...rest }) => {
         <meta charSet="utf-8" />
         <title>NodeBird</title>
       </Head>
-      < Component />
+      <Component />
     </Provider>
-  )
-}
+  );
+};
 
 NodeBird.propTypes = {
   Component: PropTypes.elementType.isRequired,
-}
+};
 
 export default NodeBird;

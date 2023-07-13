@@ -4,9 +4,8 @@ import axios from 'axios';
 import {
   LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE,
   LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE,
-  SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE
+  SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE,
 } from '../reducers/user';
-
 
 function logInAPI(data) {
   return axios.post('/api/login');
@@ -43,7 +42,7 @@ function* logOut() {
     yield put({
       type: LOG_OUT_FAILURE,
       data: err.response.data,
-    })
+    });
   }
 }
 
@@ -57,13 +56,13 @@ function* signUp(action) {
     yield delay(1000);
     yield put({
       type: SIGN_UP_SUCCESS,
-      data: action.data
+      data: action.data,
     });
   } catch (err) {
     yield put({
       type: SIGN_UP_FAILURE,
       data: err.response.data,
-    })
+    });
   }
 }
 

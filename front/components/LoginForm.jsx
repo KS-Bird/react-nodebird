@@ -1,10 +1,10 @@
 import { Form, Input, Button } from 'antd';
-import Link from 'next/link'
+import Link from 'next/link';
 import { useCallback } from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
-import useInput from '../hooks/useInput'
+import useInput from '../hooks/useInput';
 import { logInRequestAction } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
@@ -17,7 +17,7 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { logInLoading } = useSelector(state => state.user);
+  const { logInLoading } = useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
@@ -38,7 +38,7 @@ const LoginForm = () => {
         <br />
         <Input
           name="user-password"
-          type='password'
+          type="password"
           value={password}
           onChange={onChangePassword}
           required
@@ -52,5 +52,6 @@ const LoginForm = () => {
       </ButtonWrapper>
     </FormWrapper>
   );
-}
+};
+
 export default LoginForm;

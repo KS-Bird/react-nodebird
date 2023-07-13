@@ -63,7 +63,7 @@ export const Indicator = styled.div`
     color: white;
     font-size: 15px;
   }
-`
+`;
 
 export const Global = createGlobalStyle`
   .slick-slide {

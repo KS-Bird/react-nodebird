@@ -11,7 +11,7 @@ export const initialState = {
   me: null,
   signupData: {},
   loginData: {},
-}
+};
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
@@ -28,7 +28,6 @@ export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
 export const FOLLOW_REQUEST = 'FOLLOW_REQUEST';
 export const FOLLOW_SUCCESS = 'FOLLOW_SUCCESS';
 export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
-
 
 export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
@@ -47,21 +46,21 @@ export const logInRequestAction = (data) => { // action creator
   return {
     type: LOG_IN_REQUEST,
     data,
-  }
-}
+  };
+};
 
 export const logOutRequestAction = () => {
   return {
     type: LOG_OUT_REQUEST,
-  }
-}
+  };
+};
 
 export const signUpRequestAction = (data) => {
   return {
     type: SIGN_UP_REQUEST,
     data,
-  }
-}
+  };
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -127,6 +126,6 @@ const reducer = (state = initialState, action) => {
     default:
       return state;
   }
-}
+};
 
 export default reducer;

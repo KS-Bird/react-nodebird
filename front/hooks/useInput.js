@@ -7,4 +7,4 @@ export default (initialValue = null) => {
   }, []);
 
   return [value, handler, setValue];
-}
+};

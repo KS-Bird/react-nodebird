@@ -14,6 +14,6 @@ const Home = () => {
       {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
     </AppLayout>
   );
-}
+};
 
 export default Home;
