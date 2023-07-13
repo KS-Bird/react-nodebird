@@ -28,10 +28,5 @@
     "object-curly-newline": "off",
     "linebreak-style": "off",
     "react/jsx-filename-extension": "off"
-  },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
   }
 }
