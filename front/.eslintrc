@@ -1,9 +1,6 @@
 {
-  "parser": "eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 2023,
-    "sourceType": "module",
-    "jsx": true
+    "sourceType": "module"
   },
   "env": {
     "browser": true,
@@ -11,13 +8,10 @@
     "es2022": true
   },
   "extends": [
-    "airbnb"
+    "airbnb",
+    "next/core-web-vitals"
   ],
-  "plugins": [
-    "import",
-    "react-hooks",
-    "jsx-a11y"
-  ],
+  "plugins": [],
   "rules": {
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/anchor-is-valid": "off",
@@ -27,6 +21,21 @@
     "react/jsx-one-expression-per-line": "off",
     "object-curly-newline": "off",
     "linebreak-style": "off",
-    "react/jsx-filename-extension": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "arrow-body-style": "off",
+    "react/no-array-index-key": "off",
+    "react/function-component-definition": "off",
+    "@next/next/no-img-element": "off",
+    "import/no-extraneous-dependencies": "off",
+    "jsx-quotes": "off",
+    "quotes": "off",
+    "default-param-last": "off",
+    "consistent-return": "off",
+    "import/no-anonymous-default-export": [
+      "error",
+      {
+        "allowArrowFunction": true
+      }
+    ]
   }
 }
