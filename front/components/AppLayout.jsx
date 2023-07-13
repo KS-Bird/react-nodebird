@@ -13,7 +13,7 @@ import LoginForm from '../components/LoginForm';
 import UserProfile from '../components/UserProfile';
 
 const AppLayout = ({ children }) => {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn); // isLoggedIn이 바뀌면 이 컴포넌트 리렌더링됨
+  const { me } = useSelector((state) => state.user);
 
   return (
     <>
@@ -40,7 +40,7 @@ const AppLayout = ({ children }) => {
       {/* gutter: column간의 간격 xs: 모바일, md: 작은 데탑 */}
       <Row gutter={8}>
         <Col xs={24} md={6} > {/* 한줄의 24등분중에 모바일은 100% 차지 / 데탑은 25% 차지한다는 뜻*/}
-          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+          {me ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12} >
           {children}
