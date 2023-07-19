@@ -40,7 +40,7 @@ const PostCard = ({ post }) => {
                   ? (
                     <>
                       <Button>수정</Button>
-                      <Button type="danger">삭제</Button>
+                      <Button style={{ backgroundColor: 'tomato' }}>삭제</Button>
                     </>
                   )
                   : <Button>신고</Button>}
@@ -83,7 +83,7 @@ const PostCard = ({ post }) => {
 
 PostCard.propTypes = {
   post: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     User: PropTypes.object,
     content: PropTypes.string,
     createdAt: PropTypes.object,

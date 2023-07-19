@@ -6,16 +6,17 @@ import {
   ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE,
 } from '../reducers/post';
 
-function addPostAPI() {
+function addPostAPI(data) {
   return axios.post('/api/post');
 }
 
-function* addPost() {
+function* addPost(action) {
   try {
-    // const result = yield call(addPostAPI);
+    // const result = yield call(addPostAPI, action.data);
     yield delay(1000);
     yield put({
       type: ADD_POST_SUCCESS,
+      data: action.data,
     });
   } catch (err) {
     yield put({
