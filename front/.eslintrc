@@ -31,6 +31,8 @@
     "quotes": "off",
     "default-param-last": "off",
     "consistent-return": "off",
+    "quote-props": "off",
+    "no-param-reassign": "off",
     "import/no-anonymous-default-export": [
       "error",
       {

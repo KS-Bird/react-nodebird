@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import wrapper from '../store/configureStore';
 
@@ -9,6 +10,15 @@ import wrapper from '../store/configureStore';
 // _app.jsx의 컴포넌트는 렌더링하는 컴포넌트의 부모가 된다
 const NodeBird = ({ Component, ...rest }) => {
   const { store } = wrapper.useWrappedStore(rest);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
   return (
     <Provider store={store}>
       <Head>

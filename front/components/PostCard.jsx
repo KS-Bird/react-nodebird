@@ -1,16 +1,19 @@
 import { Card, Popover, Button, Avatar, List } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { RetweetOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { REMOVE_POST_REQUEST } from '../reducers/post';
 
 const PostCard = ({ post }) => {
   const id = useSelector((state) => state.user.me?.id);
+  const removePostLoading = useSelector((state) => state.post.removePostLoading);
+  const dispatch = useDispatch();
 
   const [liked, setLiked] = useState(false);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -20,6 +23,13 @@ const PostCard = ({ post }) => {
   }, []);
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev);
+  }, []);
+
+  const onRemovePost = useCallback(() => {
+    dispatch({
+      type: REMOVE_POST_REQUEST,
+      data: post.id,
+    });
   }, []);
 
   return (
@@ -40,7 +50,13 @@ const PostCard = ({ post }) => {
                   ? (
                     <>
                       <Button>수정</Button>
-                      <Button style={{ backgroundColor: 'tomato' }}>삭제</Button>
+                      <Button
+                        style={{ backgroundColor: 'tomato' }}
+                        onClick={onRemovePost}
+                        loading={removePostLoading}
+                      >
+                        삭제
+                      </Button>
                     </>
                   )
                   : <Button>신고</Button>}
@@ -52,7 +68,7 @@ const PostCard = ({ post }) => {
         ]}
       >
         <Card.Meta
-          avatar={<Avatar>{post.User.nickname}</Avatar>}
+          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
           description={<PostCardContent postData={post.content} />}
         />

@@ -9,6 +9,7 @@ const PostForm = () => {
   const dispatch = useDispatch();
   const addPostDone = useSelector((state) => state.post.addPostDone);
   const imagePaths = useSelector((state) => state.post.imagePaths);
+  const addPostLoading = useSelector((state) => state.post.addPostLoading);
 
   const [text, onChangeText, setText] = useInput('');
 
@@ -24,7 +25,7 @@ const PostForm = () => {
   }, [imageInput.current]);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost({ text }));
+    dispatch(addPost(text));
   }, [text]);
 
   return (
@@ -38,7 +39,7 @@ const PostForm = () => {
       <div>
         <input type="file" multiple ref={imageInput} style={{ display: 'none' }} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <Button type="primary" style={{ float: 'right' }} htmlType="submit">짹짹</Button>
+        <Button type="primary" loading={addPostLoading} style={{ float: 'right' }} htmlType="submit">짹짹</Button>
       </div>
       <div>
         {imagePaths.map((v) => ( // 업로드할 이미지들
