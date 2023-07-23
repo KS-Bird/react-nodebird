@@ -4,40 +4,12 @@ import { faker } from '@faker-js/faker';
 
 export const initialState = {
   // 더미데이터
-  mainPosts: [{
-    id: '1',
-    User: {
-      id: '1',
-      nickname: '제로초',
-    },
-    content: '첫번째 게시글 #해시태그 #익스프레스',
-    Images: [{
-      id: shortId.generate(),
-      src: 'https://edit.org/images/cat/book-covers-big-2019101610.jpg',
-    }, {
-      id: shortId.generate(),
-      src: 'https://kr-mb.theepochtimes.com/assets/uploads/2020/09/Mountain-Bluebird-34540-700x420.jpg',
-    }, {
-      id: shortId.generate(),
-      src: 'https://kr-mb.theepochtimes.com/assets/uploads/2020/09/Mountain-Bluebird-34540-700x420.jpg',
-    }],
-    Comments: [{
-      id: shortId.generate(),
-      User: {
-        id: shortId.generate(),
-        nickname: 'nero',
-      },
-      content: '첫 댓',
-    }, {
-      id: shortId.generate(),
-      User: {
-        id: shortId.generate(),
-        nickname: 'hero',
-      },
-      content: '두 댓',
-    }],
-  }],
+  mainPosts: [],
   imagePaths: [],
+  hasMorePosts: true,
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -49,8 +21,8 @@ export const initialState = {
   addCommentError: null,
 };
 
-initialState.mainPosts = initialState.mainPosts.concat(
-  Array(20).fill().map(() => ({
+export const generateDummyPost = (number) => (
+  Array(number).fill().map(() => ({
     id: shortId.generate(),
     User: {
       id: shortId.generate(),
@@ -74,8 +46,12 @@ initialState.mainPosts = initialState.mainPosts.concat(
       },
       content: faker.lorem.sentence(),
     }],
-  })),
+  }))
 );
+
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUSET';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUSET';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -124,6 +100,21 @@ const reducer = (state = initialState, action) => {
   // immer 사용: state 대신 draft
   return produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_POSTS_REQUEST:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.hasMorePosts = draft.mainPosts.length < 50;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
         draft.addPostDone = false;
