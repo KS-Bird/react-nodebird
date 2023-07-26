@@ -8,6 +8,7 @@ import { useState, useCallback } from 'react';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import FollowButton from './FollowButton';
 import { REMOVE_POST_REQUEST } from '../reducers/post';
 
 const PostCard = ({ post }) => {
@@ -66,6 +67,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
@@ -97,15 +99,27 @@ const PostCard = ({ post }) => {
   );
 };
 
-PostCard.propTypes = {
+FollowButton.propTypes = {
   post: PropTypes.shape({
     id: PropTypes.string,
-    User: PropTypes.object,
+    User: PropTypes.shape({
+      id: PropTypes.string,
+      nickname: PropTypes.string,
+    }),
     content: PropTypes.string,
-    createdAt: PropTypes.object,
-    Comments: PropTypes.arrayOf(PropTypes.object),
-    Images: PropTypes.arrayOf(PropTypes.object),
-  }).isRequired,
+    Images: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      src: PropTypes.string,
+    })),
+    Comments: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      content: PropTypes.string,
+      User: PropTypes.shape({
+        id: PropTypes.string,
+        nickname: PropTypes.string,
+      }),
+    })),
+  }),
 };
 
 export default PostCard;
