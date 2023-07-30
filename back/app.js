@@ -1,4 +1,5 @@
 const express = require('express');
+const postRouter = require('./routes/post');
 
 const app = express();
 
@@ -7,11 +8,11 @@ app.get('/', (req, res) => {
   res.send('hello express');
 });
 
-app.get('/api', (req, res) => {
+app.get('/', (req, res) => {
   res.send('hello api');
 });
 
-app.get('/api/posts', (req, res) => {
+app.get('/posts', (req, res) => {
   res.json([
     { id: 1, content: 'hello' },
     { id: 2, content: 'hello2' },
@@ -19,15 +20,9 @@ app.get('/api/posts', (req, res) => {
   ]);
 });
 
-app.post('/api/post', (req, res) => {
-  res.json({ id: 1, content: 'hello' });
-});
+app.use('/post', postRouter);
 
-app.delete('/api/post', (req, res) => {
-  res.json({ id: 1, content: 'hello' });
-});
-
-app.listen(3065, () => { // 3065포트로 실행
+app.listen(3065, () => { // 서버를 3065포트로 실행
   console.log('서버실행중');
 });
 
