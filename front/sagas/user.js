@@ -24,7 +24,7 @@ function* follow(action) {
   } catch (err) {
     yield put({
       type: FOLLOW_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -44,7 +44,7 @@ function* unfollow(action) {
   } catch (err) {
     yield put({
       type: UNFOLLOW_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -64,7 +64,7 @@ function* logIn(action) {
   } catch (err) {
     yield put({
       type: LOG_IN_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
@@ -83,27 +83,26 @@ function* logOut() {
   } catch (err) {
     yield put({
       type: LOG_OUT_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
 
 function signUpAPI(data) {
-  return axios.post('/api/signup');
+  return axios.post('http://localhost:3065/user', data);
 }
 
 function* signUp(action) {
   try {
-    // const result = yield call(signUpAPI, action.data);
-    yield delay(1000);
+    const result = yield call(signUpAPI, action.data);
+    console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
-      data: action.data,
     });
   } catch (err) {
     yield put({
       type: SIGN_UP_FAILURE,
-      data: err.response.data,
+      error: err.response.data,
     });
   }
 }
