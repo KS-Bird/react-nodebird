@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 const db = require('./models');
 const postRouter = require('./routes/post');
@@ -14,9 +15,12 @@ const app = express();
 
 // 서버 설정
 // 위에서 아래로 순차 실행되기 때문에 
-// 아래 두 라인이 router보다 위에 있어야함
+// 아래 라인들이 router보다 위에 있어야함
 app.use(express.json()); // json형태 데이터를 req.body에 넣어줌
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  origin: true,
+}));
 
 app.get('/', (req, res) => {
   console.log(req.url, req.method);
