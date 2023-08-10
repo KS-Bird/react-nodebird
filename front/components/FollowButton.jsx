@@ -12,8 +12,6 @@ const FollowButton = ({ post }) => {
   const Followings = useSelector((state) => state.user.me.Followings);
   const isFollowing = Followings.find((v) => v.id === post.User.id);
 
-  // useEffect 처음에 팔로우 여부 확인
-
   const onFollow = useCallback(() => {
     if (isFollowing) {
       dispatch({
@@ -40,21 +38,21 @@ const FollowButton = ({ post }) => {
 
 FollowButton.propTypes = {
   post: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     User: PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       nickname: PropTypes.string,
     }),
     content: PropTypes.string,
     Images: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       src: PropTypes.string,
     })),
     Comments: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       content: PropTypes.string,
       User: PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.number,
         nickname: PropTypes.string,
       }),
     })),

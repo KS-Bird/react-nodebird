@@ -99,27 +99,27 @@ const PostCard = ({ post }) => {
   );
 };
 
-FollowButton.propTypes = {
+PostCard.propTypes = {
   post: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     User: PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       nickname: PropTypes.string,
     }),
     content: PropTypes.string,
     Images: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       src: PropTypes.string,
     })),
     Comments: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       content: PropTypes.string,
       User: PropTypes.shape({
-        id: PropTypes.string,
+        id: PropTypes.number,
         nickname: PropTypes.string,
       }),
     })),
-  }),
+  }).isRequired,
 };
 
 export default PostCard;

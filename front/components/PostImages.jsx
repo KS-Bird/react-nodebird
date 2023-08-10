@@ -69,6 +69,7 @@ const PostImages = ({ images }) => {
 PostImages.propTypes = {
   images: PropTypes.arrayOf(PropTypes.shape({
     src: PropTypes.string,
+    id: PropTypes.number,
   })).isRequired,
 };
 

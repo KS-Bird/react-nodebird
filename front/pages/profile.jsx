@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import AppLayout from '../components/AppLayout';
@@ -9,9 +9,9 @@ import FollowList from '../components/FollowList';
 const Profile = () => {
   const { me } = useSelector((state) => state.user);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!me?.id) { // 로그아웃했을때
-      Router.push('/');
+      Router.replace('/');
     }
   }, [me?.id]);
 

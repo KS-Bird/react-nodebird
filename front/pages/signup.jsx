@@ -18,12 +18,19 @@ const Signup = () => {
   const signUpLoading = useSelector((state) => state.user.signUpLoading);
   const signUpDone = useSelector((state) => state.user.signUpDone);
   const signUpError = useSelector((state) => state.user.signUpError);
+  const me = useSelector((state) => state.user.me);
 
   useEffect(() => {
     if (signUpDone) {
-      Router.push('/');
+      Router.replace('/');
     }
   }, [signUpDone]);
+
+  useEffect(() => {
+    if (!me?.id) {
+      Router.replace('/');
+    }
+  }, [me?.id]);
 
   useEffect(() => {
     if (signUpError) {
