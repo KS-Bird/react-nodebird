@@ -9,18 +9,24 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import FollowButton from './FollowButton';
-import { REMOVE_POST_REQUEST } from '../reducers/post';
+import { REMOVE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
 
 const PostCard = ({ post }) => {
-  const id = useSelector((state) => state.user.me?.id);
-  const removePostLoading = useSelector((state) => state.post.removePostLoading);
   const dispatch = useDispatch();
 
-  const [liked, setLiked] = useState(false);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
 
-  const onToggleLike = useCallback(() => {
-    setLiked((prev) => !prev);
+  const onLike = useCallback(() => {
+    dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+  const onUnlike = useCallback(() => {
+    dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    });
   }, []);
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev);
@@ -32,7 +38,9 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, []);
-
+  const id = useSelector((state) => state.user.me?.id);
+  const liked = post.Likers.find((v) => v.id === id);
+  const removePostLoading = useSelector((state) => state.post.removePostLoading);
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
@@ -40,8 +48,8 @@ const PostCard = ({ post }) => {
         actions={[
           <RetweetOutlined key="retweet" />,
           liked
-            ? <HeartTwoTone twoToneColor="#eb2f95" key="heart" onClick={onToggleLike} />
-            : <HeartOutlined key="heart" onClick={onToggleLike} />,
+            ? <HeartTwoTone twoToneColor="red" key="heart" onClick={onUnlike} />
+            : <HeartOutlined key="heart" onClick={onLike} />,
           <MessageOutlined key="comment" onClick={onToggleComment} />,
           <Popover
             key="more"
@@ -118,6 +126,9 @@ PostCard.propTypes = {
         id: PropTypes.number,
         nickname: PropTypes.string,
       }),
+    })),
+    Likes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
     })),
   }).isRequired,
 };

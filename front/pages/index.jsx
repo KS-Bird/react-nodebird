@@ -15,6 +15,7 @@ const Home = () => {
   const loadPostsLoading = useSelector(({ post }) => post.loadPostsLoading);
 
   useEffect(() => {
+    // 새로고침시 로그인 요청
     dispatch({
       type: LOAD_MY_INFO_REQUEST,
     });

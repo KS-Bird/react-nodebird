@@ -7,7 +7,8 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => { // 새로고침시 프론트 로그인 시도
+// 새로고침시 프론트 로그인 시도
+router.get('/', async (req, res, next) => {
   try {
     if (req.user) {
       const fullUserWithoutPassword = await User.findOne({
@@ -85,6 +86,7 @@ router.post('/logout', isLoggedIn, (req, res) => {
   });
 });
 
+// 회원가입
 router.post('/', isNotLoggedIn, async (req, res, next) => {
   try {
     // 비동기 함수와 동기 코드의 순서를 await로 맞추기
