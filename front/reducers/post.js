@@ -133,7 +133,7 @@ const reducer = (state = initialState, action) => {
         draft.removePostLoading = false;
         draft.removePostDone = true;
         // 복사할 필요는 없지만 filter가 편해서
-        draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+        draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data.PostId);
         break;
       case REMOVE_POST_FAILURE:
         draft.removePostLoading = false;

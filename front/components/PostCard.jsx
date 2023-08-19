@@ -55,7 +55,7 @@ const PostCard = ({ post }) => {
             key="more"
             content={(
               <Button.Group>
-                {id && post.User.id === id
+                {id === post.UserId
                   ? (
                     <>
                       <Button>수정</Button>
@@ -75,7 +75,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
-        extra={id && <FollowButton post={post} />}
+        extra={id && id !== post.UserId && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}

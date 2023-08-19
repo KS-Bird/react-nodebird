@@ -5,7 +5,6 @@ const { User, Post, Image, Comment } = require('../models');
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-  console.log('error');
   try {
     const posts = await Post.findAll({
       limit: 10,
