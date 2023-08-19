@@ -21,8 +21,8 @@ db.sequelize.sync()
 passportConfig();
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // axios
+app.use(express.urlencoded({ extended: true })); // form
 app.use(cors({
   origin: true,
   credentials: true,

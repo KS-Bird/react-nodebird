@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useCallback, useRef, useEffect } from 'react';
 
 import useInput from '../hooks/useInput';
-import { addPost } from '../reducers/post';
+import { addPost, UPLOAD_IMAGES_REQUEST } from '../reducers/post';
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -24,6 +24,18 @@ const PostForm = () => {
     imageInput.current.click();
   }, [imageInput.current]);
 
+  const onChangeImages = useCallback((e) => {
+    console.log('images', e.target.files);
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (f) => { // 유사배열이라 forEach를 못씀
+      imageFormData.append('image', f);
+    });
+    dispatch({
+      type: UPLOAD_IMAGES_REQUEST,
+      data: imageFormData,
+    });
+  }, []);
+
   const onSubmit = useCallback(() => {
     dispatch(addPost(text));
   }, [text]);
@@ -37,7 +49,14 @@ const PostForm = () => {
         placeholder="어떤 신기한 일이 있었나요?"
       />
       <div>
-        <input type="file" multiple ref={imageInput} style={{ display: 'none' }} />
+        <input
+          type="file"
+          name="image"
+          multiple
+          ref={imageInput}
+          onChange={onChangeImages}
+          style={{ display: 'none' }}
+        />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button type="primary" loading={addPostLoading} style={{ float: 'right' }} htmlType="submit">짹짹</Button>
       </div>
