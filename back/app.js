@@ -5,6 +5,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const path = require('path');
 
 const db = require('./models');
 const passportConfig = require('./passport');
@@ -21,8 +22,10 @@ db.sequelize.sync()
 passportConfig();
 const app = express();
 
-app.use(express.json()); // axios
-app.use(express.urlencoded({ extended: true })); // form
+// 프론트에서 "localhost3065/이미지경로"로 접근가능하게 함
+app.use('/', express.static(path.join(__dirname, 'uploads')));
+app.use(express.json()); // 프론트에서 오는 json을 req.body에 넣어줌
+app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
 app.use(cors({
   origin: true,
   credentials: true,

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useCallback, useRef, useEffect } from 'react';
 
 import useInput from '../hooks/useInput';
-import { addPost, UPLOAD_IMAGES_REQUEST } from '../reducers/post';
+import { UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE, ADD_POST_REQUEST } from '../reducers/post';
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -36,9 +36,28 @@ const PostForm = () => {
     });
   }, []);
 
+  const onRemoveImage = useCallback((index) => () => {
+    dispatch({
+      type: REMOVE_IMAGE,
+      data: index,
+    });
+  });
+
   const onSubmit = useCallback(() => {
-    dispatch(addPost(text));
-  }, [text]);
+    if (!text || !text.trim()) {
+      return alert('게시글을 작성하세요');
+    }
+    const formData = new FormData();
+    console.log(imagePaths);
+    imagePaths.forEach((path) => {
+      formData.append('image', path);
+    });
+    formData.append('content', text);
+    return dispatch({
+      type: ADD_POST_REQUEST,
+      data: formData, // 연습을 위해 formData사용 json형식이 더 좋다
+    });
+  }, [text, imagePaths]);
 
   return (
     <Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmit}>
@@ -61,10 +80,10 @@ const PostForm = () => {
         <Button type="primary" loading={addPostLoading} style={{ float: 'right' }} htmlType="submit">짹짹</Button>
       </div>
       <div>
-        {imagePaths.map((v) => ( // 업로드할 이미지들
+        {imagePaths.map((v, i) => ( // 이미지 미리보기
           <div key={v} style={{ display: 'inline-block' }}>
-            <img src={v} alt={v} style={{ width: '200px' }} />
-            <Button>제거</Button>
+            <img src={`http://localhost:3065/${v}`} alt={v} style={{ width: '200px' }} />
+            <Button onClick={onRemoveImage(i)}>제거</Button>
           </div>
         ))}
       </div>

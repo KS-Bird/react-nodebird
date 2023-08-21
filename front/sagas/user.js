@@ -54,7 +54,6 @@ function* loadFollowers(action) {
   }
 }
 
-
 function loadMyInfoAPI() {
   return axios.get('/user');
 }

@@ -120,7 +120,7 @@ router.patch('/nickname', isLoggedIn, async (req, res, next) => {
     await User.update({
       nickname: req.body.nickname, // 닉네임 수정
     }, {
-      where: { id: req.user.id }, // 내 아이디의 닉네임
+      where: { id: req.user.id }, // 내 아이디
     });
     res.status(200).json({ nickname: req.body.nickname });
   } catch (error) {

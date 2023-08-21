@@ -22,12 +22,14 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, []);
+
   const onUnlike = useCallback(() => {
     dispatch({
       type: UNLIKE_POST_REQUEST,
       data: post.id,
     });
   }, []);
+
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev);
   }, []);
@@ -38,9 +40,11 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, []);
+
   const id = useSelector((state) => state.user.me?.id);
   const liked = post.Likers.find((v) => v.id === id);
   const removePostLoading = useSelector((state) => state.post.removePostLoading);
+
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
