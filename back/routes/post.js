@@ -30,10 +30,18 @@ const upload = multer({ // multipart/form-data
 });
 router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
   try {
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (hashtags) {
+      // 해시태그 없으면 create
+      const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({
+        where: { name: tag.slice(1).toLowerCase() },
+      }))); // result의 포맷 : [['해시', true], ['태그', true]]
+      await post.addHashtags(result.map((v) => v[0]));
+    }
     if (req.body.image) {
       if (Array.isArray(req.body.image)) { // 이미지 여러장
         const images = await Promise.all(req.body.image.map((image) => Image.create({ src: image })));
@@ -106,7 +114,7 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
     await Post.destroy({
       where: {
         id: req.params.postId,
-        UserId: req.user.id,
+        UserId: req.user.id, // 유저의 post여야함
       },
     });
     res.json({ PostId: Number(req.params.postId) });
