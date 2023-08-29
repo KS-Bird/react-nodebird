@@ -13,6 +13,7 @@ const Home = () => {
   const mainPosts = useSelector(({ post }) => post.mainPosts);
   const hasMorePosts = useSelector(({ post }) => post.hasMorePosts);
   const loadPostsLoading = useSelector(({ post }) => post.loadPostsLoading);
+  const retweetError = useSelector((state) => state.post.retweetError);
 
   useEffect(() => {
     // 새로고침시 로그인 요청
@@ -30,8 +31,10 @@ const Home = () => {
       if (window.scrollY + document.documentElement.clientHeight
         > document.documentElement.scrollHeight - 300) {
         if (hasMorePosts && !loadPostsLoading) {
+          const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
             type: LOAD_POSTS_REQUEST,
+            lastId,
           });
         }
       }
@@ -41,6 +44,13 @@ const Home = () => {
       window.removeEventListener('scroll', onScroll);
     };
   }, [hasMorePosts, loadPostsLoading]);
+
+  // 리트윗 에러 메시지
+  useEffect(() => {
+    if (retweetError) {
+      alert(retweetError);
+    }
+  }, [retweetError]);
 
   return (
     <AppLayout>

@@ -54,18 +54,18 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [{
-        model: Comment,
+        model: Comment, // 게시글의 댓글
         include: [{
-          model: User, // 댓글작성자
+          model: User, // 댓글 작성자
           attributes: ['id', 'nickname'],
         }],
-      }, {
+      }, { // 게시글 이미지
         model: Image,
       }, {
-        model: User, // 게시글작성자
+        model: User, // 게시글 작성자
         attributes: ['id', 'nickname'],
       }, {
-        model: User, // 좋아요누른사람
+        model: User, // 좋아요 누른사람
         as: 'Likers',
         attributes: ['id'],
       }],
@@ -81,6 +81,73 @@ router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => {
   console.log(req.files);
   res.json(req.files.map((v) => v.filename));
 });
+
+router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.postId },
+      include: [{
+        model: Post,
+        as: 'Retweet',
+      }],
+    });
+    if (!post) {
+      return res.status(403).send('존재하지 않는 게시글입니다')
+    }
+    // 리트윗 게시글이 자신의 게시글인 경우 허용 X
+    if (req.user.id === post.UserId || req.user.id === post.Retweet?.UserId) {
+      return res.status(403).send('자신의 글 리트윗 할 수 없습니다.');
+    }
+    const retweetTargetId = post.RetweetId || post.id;
+    const exPost = await Post.findOne({
+      where: {
+        UserId: req.user.id,
+        RetweetId: retweetTargetId,
+      },
+    });
+    if (exPost) {
+      return res.status(403).send('이미 리트윗한 글입니다.');
+    }
+    const retweet = await Post.create({
+      UserId: req.user.id,
+      RetweetId: retweetTargetId,
+      content: 'retweet',
+    });
+    const retweetWithPrevPost = await Post.findOne({
+      where: { id: retweet.id },
+      include: [{
+        model: Post,
+        as: 'Retweet',
+        include: [{
+          model: User,
+          attributes: ['id', 'nickname'],
+        }, {
+          model: Image,
+        }],
+      }, {
+        model: User,
+        attributes: ['id', 'nickname'],
+      }, {
+        model: Image,
+      }, {
+        model: Comment,
+        include: [{
+          model: User,
+          attributes: ['id', 'nickname'],
+        }],
+      }, {
+        model: User,
+        as: 'Likers',
+        attributes: ['id'],
+      }],
+    });
+    res.status(201).send(retweetWithPrevPost);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 
 router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {
   try {
