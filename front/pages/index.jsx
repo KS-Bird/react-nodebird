@@ -1,11 +1,13 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
+import { END } from 'redux-saga';
 
 import AppLayout from '../components/AppLayout';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import wrapper from '../store/configureStore';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -16,14 +18,7 @@ const Home = () => {
   const retweetError = useSelector((state) => state.post.retweetError);
 
   useEffect(() => {
-    // 새로고침시 로그인 요청
-    dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-    });
-    // 컴포넌트 첫 마운트에 posts 요청
-    dispatch({
-      type: LOAD_POSTS_REQUEST,
-    });
+
   }, []);
 
   useEffect(() => {
@@ -59,5 +54,20 @@ const Home = () => {
     </AppLayout>
   );
 };
+
+// 화면을 그리기 전에 서버쪽에서 실행됨
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
+  console.log(store);
+  // 새로고침시 로그인 요청
+  store.dispatch({
+    type: LOAD_MY_INFO_REQUEST,
+  });
+  // 컴포넌트 첫 마운트에 posts 요청
+  store.dispatch({
+    type: LOAD_POSTS_REQUEST,
+  });
+  store.dispatch(END);
+  await store.sagaTask.toPromise();
+});
 
 export default Home;
