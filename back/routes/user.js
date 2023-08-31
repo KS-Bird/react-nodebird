@@ -9,6 +9,7 @@ const router = express.Router();
 
 // 새로고침시 프론트 로그인 시도
 router.get('/', async (req, res, next) => {
+  console.log(req.headers);
   try {
     if (req.user) {
       const fullUserWithoutPassword = await User.findOne({

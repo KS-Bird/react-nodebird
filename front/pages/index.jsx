@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { END } from 'redux-saga';
+import axios from 'axios';
 
 import AppLayout from '../components/AppLayout';
 import PostForm from '../components/PostForm';
@@ -55,10 +56,12 @@ const Home = () => {
   );
 };
 
-// 화면을 그리기 전에 서버쪽에서 실행됨
+// 화면을 그리기 전에 프론트서버에서 실행됨
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
-  console.log(store);
+  console.log(store, req);
+  // 쿠키를 넣는다
   // 새로고침시 로그인 요청
+  axios.defaults.headers.Cookie = req?.headers.cookie;
   store.dispatch({
     type: LOAD_MY_INFO_REQUEST,
   });
@@ -68,6 +71,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   });
   store.dispatch(END);
   await store.sagaTask.toPromise();
+  axios.defaults.headers.Cookie = ''; // 쿠키를 비운다
 });
 
 export default Home;
