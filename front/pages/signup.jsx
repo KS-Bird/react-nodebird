@@ -4,10 +4,13 @@ import { useCallback, useEffect, useState } from 'react';
 import Router from 'next/router';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { END } from 'redux-saga';
 
 import useInput from '../hooks/useInput';
 import AppLayout from '../components/AppLayout';
-import { signUpRequestAction } from '../reducers/user';
+import { signUpRequestAction, LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import wrapper from '../store/configureStore';
 
 const ErrorMessage = styled.div`
   color: red;
@@ -27,7 +30,7 @@ const Signup = () => {
   }, [signUpDone]);
 
   useEffect(() => {
-    if (!me?.id) {
+    if (me?.id) {
       Router.replace('/');
     }
   }, [me?.id]);
@@ -111,5 +114,14 @@ const Signup = () => {
     </AppLayout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
+  axios.defaults.headers.Cookie = req?.headers.cookie;
+  store.dispatch({
+    type: LOAD_MY_INFO_REQUEST,
+  });
+  store.dispatch(END);
+  await store.sagaTask.toPromise();
+});
 
 export default Signup;
