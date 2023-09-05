@@ -14,6 +14,7 @@ const NodeBird = ({ Component, ...rest }) => {
     <Provider store={store}>
       <Head>
         <meta charSet="utf-8" />
+        <link rel="shortcut icon" href="favicon.ico" />
         <title>NodeBird</title>
       </Head>
       <Component />
