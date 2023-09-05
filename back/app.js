@@ -12,6 +12,7 @@ const passportConfig = require('./passport');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
 const postsRouter = require('./routes/posts');
+const hashtagRouter = require('./routes/hashtag');
 
 dotenv.config();
 db.sequelize.sync()
@@ -43,6 +44,7 @@ app.use(morgan('dev'));
 app.use('/posts', postsRouter);
 app.use('/post', postRouter);
 app.use('/user', userRouter);
+app.use('/hashtag', hashtagRouter);
 
 app.listen(3065, () => {
   console.log('3065포트 서버실행중');

@@ -5,12 +5,11 @@ import { END } from "redux-saga";
 import { useSelector } from "react-redux";
 import Head from "next/head";
 
-import { Divider } from "antd";
 import wrapper from '../../store/configureStore';
 import AppLayout from "../../components/AppLayout";
 import PostCard from "../../components/PostCard";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
-import { LOAD_POSTS_REQUEST, LOAD_POST_REQUEST } from "../../reducers/post";
+import { LOAD_POST_REQUEST } from "../../reducers/post";
 
 const Post = () => {
   const router = useRouter();
@@ -44,9 +43,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   axios.defaults.headers.Cookie = req?.headers.cookie;
   store.dispatch({
     type: LOAD_MY_INFO_REQUEST,
-  });
-  store.dispatch({
-    type: LOAD_POSTS_REQUEST,
   });
   store.dispatch({
     type: LOAD_POST_REQUEST,

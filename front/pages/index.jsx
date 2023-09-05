@@ -19,10 +19,6 @@ const Home = () => {
   const retweetError = useSelector((state) => state.post.retweetError);
 
   useEffect(() => {
-
-  }, []);
-
-  useEffect(() => {
     function onScroll() {
       if (window.scrollY + document.documentElement.clientHeight
         > document.documentElement.scrollHeight - 300) {
@@ -39,7 +35,7 @@ const Home = () => {
     return () => { // 이벤트 리스너 해제, 안 그러면 메모리에 쌓인다
       window.removeEventListener('scroll', onScroll);
     };
-  }, [hasMorePosts, loadPostsLoading]);
+  }, [hasMorePosts, loadPostsLoading, mainPosts.length]);
 
   // 리트윗 에러 메시지
   useEffect(() => {
@@ -58,7 +54,6 @@ const Home = () => {
 
 // 화면을 그리기 전에 프론트서버에서 실행됨
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
-  console.log(store, req);
   // 쿠키를 넣는다
   // 새로고침시 로그인 요청
   axios.defaults.headers.Cookie = req?.headers.cookie;
