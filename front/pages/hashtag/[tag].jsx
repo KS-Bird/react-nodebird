@@ -2,8 +2,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { END } from 'redux-saga';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
-import { Card, Avatar } from 'antd';
 import axios from 'axios';
 
 import AppLayout from '../../components/AppLayout';

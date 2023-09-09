@@ -1,11 +1,14 @@
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Row, Col } from 'antd';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import Router from 'next/router';
 
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
+import useInput from '../hooks/useInput';
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
@@ -13,6 +16,11 @@ const SearchInput = styled(Input.Search)`
 
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
+  const [searchInput, onChangeSearchInput] = useInput('');
+
+  const onSearch = useCallback(() => {
+    Router.push(`/hashtag/${searchInput}`);
+  }, [searchInput]);
 
   return (
     <>
@@ -28,7 +36,15 @@ const AppLayout = ({ children }) => {
             key: "profile",
           },
           {
-            label: <SearchInput key="search" enterButton />,
+            label: (
+              <SearchInput
+                key="search"
+                enterButton
+                value={searchInput}
+                onChange={onChangeSearchInput}
+                onSearch={onSearch}
+              />
+            ),
             key: "search",
           },
           {

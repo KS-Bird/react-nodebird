@@ -50,7 +50,9 @@ router.get("/followings", isLoggedIn, async (req, res, next) => {
     const user = await User.findOne({
       where: { id: req.user.id },
     });
-    const followings = await user.getFollowings();
+    const followings = await user.getFollowings({
+      limit: Number(req.query.limit),
+    });
     res.status(200).json(followings);
   } catch (error) {
     console.error(error);
@@ -64,7 +66,9 @@ router.get("/followers", isLoggedIn, async (req, res, next) => {
     const user = await User.findOne({
       where: { id: req.user.id },
     });
-    const followers = await user.getFollowers();
+    const followers = await user.getFollowers({
+      limit: Number(req.query.limit),
+    });
     res.status(200).json(followers);
   } catch (error) {
     console.error(error);
