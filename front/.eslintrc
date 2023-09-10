@@ -34,6 +34,7 @@
     "quote-props": "off",
     "no-param-reassign": "off",
     "no-alert": "off",
+    "react/jsx-props-no-spreading": "off",
     "import/no-anonymous-default-export": [
       "error",
       {
