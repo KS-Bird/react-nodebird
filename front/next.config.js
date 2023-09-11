@@ -4,13 +4,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer({
   compress: true,
-  webpack(config, { webpack }) {
+  webpack(config) {
     const prod = process.env.NODE_ENV === 'production';
     return {
       ...config,
       mode: prod ? 'production' : 'development',
       // hidden-source-map : 소스코드 숨겨짐
-      devtool: prod ? 'hidden-source-map' : 'eval',
+      devtool: prod ? 'hidden-source-map' : 'inline-source-map',
     };
   },
 });
