@@ -3,3 +3,4 @@ node_modules
 migrations
 .env
 uploads
+nodebird.pem
