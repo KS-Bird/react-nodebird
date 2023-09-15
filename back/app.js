@@ -25,7 +25,7 @@ db.sequelize.sync()
 passportConfig();
 const app = express();
 
-if(process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
   app.use(hpp());
   app.use(helmet());
@@ -59,5 +59,5 @@ app.use('/user', userRouter);
 app.use('/hashtag', hashtagRouter);
 
 app.listen(3065, () => {
-  console.log('3065포트 서버실행중');
+  console.log('서버실행중');
 });
