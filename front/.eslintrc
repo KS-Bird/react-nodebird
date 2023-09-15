@@ -35,6 +35,7 @@
     "no-param-reassign": "off",
     "no-alert": "off",
     "react/jsx-props-no-spreading": "off",
+    "import/prefer-default-export": "off",
     "import/no-anonymous-default-export": [
       "error",
       {

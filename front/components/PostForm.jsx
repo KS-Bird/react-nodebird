@@ -4,6 +4,7 @@ import { useCallback, useRef, useEffect } from 'react';
 
 import useInput from '../hooks/useInput';
 import { UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE, ADD_POST_REQUEST } from '../reducers/post';
+import { backUrl } from '../config/config';
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ const PostForm = () => {
       <div>
         {imagePaths.map((v, i) => ( // 이미지 미리보기
           <div key={v} style={{ display: 'inline-block' }}>
-            <img src={`http://localhost:3065/${v}`} alt={v} style={{ width: '200px' }} />
+            <img src={`${backUrl}/${v}`} alt={v} style={{ width: '200px' }} />
             <Button onClick={onRemoveImage(i)}>제거</Button>
           </div>
         ))}
