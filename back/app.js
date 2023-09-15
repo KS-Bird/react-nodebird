@@ -6,8 +6,8 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const path = require('path');
-const path = require('hpp');
-const path = require('helmet');
+const hpp = require('hpp');
+const helmet = require('helmet');
 
 const db = require('./models');
 const passportConfig = require('./passport');
@@ -48,7 +48,10 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(morgan('dev'));
+
+app.get('/', (req, res) => {
+  res.status(200).send('nodebird express server');
+});
 
 app.use('/posts', postsRouter);
 app.use('/post', postRouter);
