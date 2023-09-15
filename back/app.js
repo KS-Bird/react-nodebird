@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const path = require('path');
+const path = require('hpp');
+const path = require('helmet');
 
 const db = require('./models');
 const passportConfig = require('./passport');
@@ -23,12 +25,19 @@ db.sequelize.sync()
 passportConfig();
 const app = express();
 
+if(process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+  app.use(hpp());
+  app.use(helmet());
+} else {
+  app.use(morgan('dev'));
+}
 // 프론트에서 "localhost3065/이미지경로"로 접근가능하게 함
 app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json()); // 프론트에서 오는 json을 req.body에 넣어줌
 app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
 app.use(cors({
-  origin: true,
+  origin: ['http://localhost:3000', 'nodebird.com'],
   credentials: true,
 }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
