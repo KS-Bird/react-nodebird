@@ -7,10 +7,8 @@ import post from './post';
 const rootReducer = (state, action) => { // 쪼갠 리듀서를 합친다
   switch (action.type) {
     case HYDRATE: // SSR 완료시 실행된다
-      console.log('HYDRATE', action);
       return action.payload; // 받아온 데이터
     default: {
-      console.log('init store');
       const combinedReducer = combineReducers({
         user,
         post,
