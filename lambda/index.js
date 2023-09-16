@@ -26,7 +26,7 @@ exports.handler = async (event, context, callback) => {
       Key: `thumb/${filename}`,
       Body: resizedImage,
     }).promise();
-    console.log('put', resizeImage.length);
+    console.log('put', resizedImage.length);
     return callback(null, `thumb/${filename}`);
   } catch (error) {
     console.error(error);
