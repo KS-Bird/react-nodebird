@@ -37,7 +37,7 @@ app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json()); // 프론트에서 오는 json을 req.body에 넣어줌
 app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://3.39.230.82', 'nodebird.com'],
+  origin: ['http://localhost:3000', 'http://ksbird.site'],
   credentials: true,
 }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -45,6 +45,11 @@ app.use(session({
   saveUninitialized: false,
   resave: false,
   secret: process.env.COOKIE_SECRET,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    domain: process.env.NODE_ENV === 'production' && '.ksbird.site',
+  }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
