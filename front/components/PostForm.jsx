@@ -82,7 +82,11 @@ const PostForm = () => {
       <div>
         {imagePaths.map((v, i) => ( // 이미지 미리보기
           <div key={v} style={{ display: 'inline-block' }}>
-            <img src={v} alt={v} style={{ width: '200px' }} />
+            <img
+              src={process.env.NODE_ENV === 'production' ? v.replace(/\/thumb\//, '/original/') : v}
+              alt={v}
+              style={{ width: '200px' }}
+            />
             <Button onClick={onRemoveImage(i)}>제거</Button>
           </div>
         ))}
