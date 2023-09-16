@@ -4,7 +4,6 @@ import { useCallback, useRef, useEffect } from 'react';
 
 import useInput from '../hooks/useInput';
 import { UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE, ADD_POST_REQUEST } from '../reducers/post';
-import { backUrl } from '../config/config';
 
 const PostForm = () => {
   const dispatch = useDispatch();
