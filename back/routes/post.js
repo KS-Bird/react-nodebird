@@ -99,7 +99,9 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
 
 router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => {
   console.log(req.files);
-  res.json(req.files.map((v) => process.env.NODE_ENV === 'production' ? v.location : `http://localhost:3065/${v.filename}`));
+  res.json(req.files.map((v) => process.env.NODE_ENV === 'production' 
+  ? v.location.replace(/\/original\//, '/thumb/') 
+  : `http://localhost:3065/${v.filename}`));
 });
 
 router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {

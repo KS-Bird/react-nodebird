@@ -26,7 +26,14 @@ const ImagesZoom = ({ images, onClose }) => {
           >
             {images.map((v) => (
               <ImgWrapper key={v.src}>
-                <img src={v.src} alt={v.src} />
+                <img
+                  src={
+                  process.env.NODE_ENV === 'production'
+                    ? v.src.replace(/\/thumb\//, '/original/')
+                    : v.src
+                }
+                  alt={v.src}
+                />
               </ImgWrapper>
             ))}
           </Slick>
