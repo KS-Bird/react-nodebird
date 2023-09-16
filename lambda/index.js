@@ -15,7 +15,7 @@ exports.handler = async (event, context, callback) => {
   const requiredFormat = ext === 'jpg' ? 'jpeg' : ext; // jpg는 jpeg로 바꿔야함
 
   try {
-    const s3Object = await s3.getObject({ Bucket, key }).promise(); // 이미지 가져오기
+    const s3Object = await s3.getObject({ Bucket, Key }).promise(); // 이미지 가져오기
     console.log('original', s3Object.Body.length); // 이미지 바이트 확인
     const resizedImage = await sharp(s3Object.Body) // 이미지 리사이징
     .resize(400, 400, {fit: 'inside'})
@@ -23,7 +23,7 @@ exports.handler = async (event, context, callback) => {
     .toBuffer();
     await s3.putObject({ // 리사이징된 이미지를 업로드
       Bucket, 
-      key: `thumb/${filename}`,
+      Key: `thumb/${filename}`,
       Body: resizedImage,
     }).promise();
     console.log('put', resizeImage.length);
