@@ -48,7 +48,7 @@ const PostForm = () => {
       return alert('게시글을 작성하세요');
     }
     const formData = new FormData();
-    console.log(imagePaths);
+    console.log('imagePaths:', imagePaths);
     imagePaths.forEach((path) => {
       formData.append('image', path);
     });
@@ -57,7 +57,7 @@ const PostForm = () => {
       type: ADD_POST_REQUEST,
       data: formData, // 연습을 위해 formData사용 json형식이 더 좋다
     });
-  }, [text, imagePaths]);
+  }, [text, imagePaths.length]);
 
   return (
     <Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmit}>
