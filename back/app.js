@@ -29,28 +29,38 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
   app.use(hpp());
   app.use(helmet());
+  app.use(cors({
+    origin: 'http://ksbird.site',
+    credentials: true,
+  }));
+  app.use(session({
+    saveUninitialized: false,
+    resave: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      domain: process.env.NODE_ENV === 'production' && '.ksbird.site',
+    }
+  }));
 } else {
   app.use(morgan('dev'));
+  app.use(cors({
+    origin: true,
+    credentials: true,
+  }));
+  app.use(session({
+    saveUninitialized: false,
+    resave: false,
+    secret: process.env.COOKIE_SECRET,
+  }));
 }
 // 프론트에서 "localhost3065/이미지경로"로 접근가능하게 함
 app.use('/', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json()); // 프론트에서 오는 json을 req.body에 넣어줌
 app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://ksbird.site'],
-  credentials: true,
-}));
+
 app.use(cookieParser(process.env.COOKIE_SECRET));
-app.use(session({
-  saveUninitialized: false,
-  resave: false,
-  secret: process.env.COOKIE_SECRET,
-  cookie: {
-    httpOnly: true,
-    secure: false,
-    domain: process.env.NODE_ENV === 'production' && '.ksbird.site',
-  }
-}));
 app.use(passport.initialize());
 app.use(passport.session());
 
