@@ -2,32 +2,52 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
 
 const { Post, Comment, Image, Hashtag, User } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
-try {
-  fs.accessSync('uploads');
-} catch (error) {
-  console.log('uploads 폴더 없으므로 생성합니다');
-  fs.mkdirSync('uploads');
+let upload;
+if (process.env.NODE_ENV === 'production') {
+  AWS.config.update({
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    region: 'ap-northeast-2',
+  });
+  upload = multer({
+    storage: multerS3({
+      s3: new AWS.S3(),
+      bucket: 'ksbird',
+      key(req, file, cb) { // 저장되는 파일 이름
+        cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
+      },
+    }),
+    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+  });
+} else {
+  try {
+    fs.accessSync('uploads');
+  } catch (error) {
+    console.log('uploads 폴더 없으므로 생성합니다');
+    fs.mkdirSync('uploads');
+  }
+
+  upload = multer({ // multipart/form-data
+    storage: multer.diskStorage({ // 하드디스크에 저장
+      destination(req, file, done) {
+        done(null, 'uploads'); // uploads 폴더에 저장
+      },
+      filename(req, file, done) { // 
+        done(null, `${Date.now()}_${path.basename(file.originalname)}`); // 시간_이름.png
+      }
+    }),
+    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+  });
 }
 
-const upload = multer({ // multipart/form-data
-  storage: multer.diskStorage({ // 하드디스크에 저장
-    destination(req, file, done) {
-      done(null, 'uploads'); // uploads 폴더에 저장
-    },
-    filename(req, file, done) { // 이름.png
-      const ext = path.extname(file.originalname); // .png
-      const basename = path.basename(file.originalname, ext) // 이름
-      done(null, basename + '_' + new Date().getTime() + ext); // 이름155132.png
-    }
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
-});
 router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
   try {
     const hashtags = req.body.content.match(/#[^\s#]+/g);
@@ -79,7 +99,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
 
 router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => {
   console.log(req.files);
-  res.json(req.files.map((v) => v.filename));
+  res.json(req.files.map((v) => process.env.NODE_ENV === 'production' ? v.location : `http://localhost:3065/${v.filename}`));
 });
 
 router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {

@@ -54,9 +54,10 @@ if (process.env.NODE_ENV === 'production') {
     resave: false,
     secret: process.env.COOKIE_SECRET,
   }));
+  // 프론트에서 "localhost3065/이미지경로"로 접근가능하게 함
+  app.use('/', express.static(path.join(__dirname, 'uploads')));
 }
-// 프론트에서 "localhost3065/이미지경로"로 접근가능하게 함
-app.use('/', express.static(path.join(__dirname, 'uploads')));
+
 app.use(express.json()); // 프론트에서 오는 json을 req.body에 넣어줌
 app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
 
@@ -73,6 +74,6 @@ app.use('/post', postRouter);
 app.use('/user', userRouter);
 app.use('/hashtag', hashtagRouter);
 
-app.listen(80, () => {
+app.listen(process.env.NODE_ENV === 'production' ? 80 : 3065, () => {
   console.log('서버실행중');
 });
