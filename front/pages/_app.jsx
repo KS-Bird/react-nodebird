@@ -8,8 +8,7 @@ import wrapper from '../store/configureStore';
 // 여기서 Component는 렌더링할 컴포넌트의 return부분이다
 // _app.jsx의 컴포넌트는 렌더링하는 컴포넌트의 부모가 된다
 const NodeBird = ({ Component, ...rest }) => {
-  const { store } = wrapper.useWrappedStore(rest);
-
+  const { store, props } = wrapper.useWrappedStore(rest);
   return (
     <Provider store={store}>
       <Head>
@@ -17,7 +16,7 @@ const NodeBird = ({ Component, ...rest }) => {
         <link rel="shortcut icon" href="favicon.ico" />
         <title>NodeBird</title>
       </Head>
-      <Component />
+      <Component {...props.pageProps} />
     </Provider>
   );
 };
