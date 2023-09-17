@@ -35,7 +35,7 @@ const PostCard = ({ post }) => {
       type: LIKE_POST_REQUEST,
       data: post.id,
     });
-  }, []);
+  }, [id]);
 
   const onUnlike = useCallback(() => {
     if (!id) {
@@ -45,7 +45,7 @@ const PostCard = ({ post }) => {
       type: UNLIKE_POST_REQUEST,
       data: post.id,
     });
-  }, []);
+  }, [id]);
 
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev);
@@ -59,7 +59,7 @@ const PostCard = ({ post }) => {
       type: REMOVE_POST_REQUEST,
       data: post.id,
     });
-  }, []);
+  }, [id]);
 
   const onRetweet = useCallback(() => {
     if (!id) {
