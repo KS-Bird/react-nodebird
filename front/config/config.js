@@ -1,1 +1,1 @@
-export const backUrl = process.env.NODE_ENV === 'production' ? 'http://api.ksbird.site' : 'http://localhost:3065';
+export const backUrl = process.env.NODE_ENV === 'production' ? 'https://api.ksbird.site' : 'http://localhost:3065';

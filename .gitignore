@@ -4,3 +4,5 @@ migrations
 .env
 uploads
 nodebird.pem
+/lambda/aws
+/lambda/aws-upload.zip

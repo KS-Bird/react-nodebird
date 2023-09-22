@@ -26,20 +26,22 @@ passportConfig();
 const app = express();
 
 if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
   app.use(morgan('combined'));
   app.use(hpp());
   app.use(helmet());
   app.use(cors({
-    origin: 'http://ksbird.site',
+    origin: 'https://ksbird.site',
     credentials: true,
   }));
   app.use(session({
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    proxy: true,
     cookie: {
       httpOnly: true,
-      secure: false,
+      secure: true,
       domain: process.env.NODE_ENV === 'production' && '.ksbird.site',
     }
   }));
@@ -74,6 +76,6 @@ app.use('/post', postRouter);
 app.use('/user', userRouter);
 app.use('/hashtag', hashtagRouter);
 
-app.listen(process.env.NODE_ENV === 'production' ? 80 : 3065, () => {
+app.listen(3065, () => {
   console.log('서버실행중');
 });
