@@ -13,6 +13,9 @@ import {
   LOAD_POST_REQUEST, LOAD_POST_SUCCESS, LOAD_POST_FAILURE,
   LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE,
   LOAD_USER_POSTS_REQUEST, LOAD_USER_POSTS_SUCCESS, LOAD_USER_POSTS_FAILURE,
+  UPDATE_POST_REQUEST, UPDATE_POST_SUCCESS, UPDATE_POST_FAILURE,
+  LOAD_FOLLOWINGS_POSTS_REQUEST, LOAD_FOLLOWINGS_POSTS_SUCCESS, LOAD_FOLLOWINGS_POSTS_FAILURE,
+  LOAD_UNFOLLOWINGS_POSTS_REQUEST, LOAD_UNFOLLOWINGS_POSTS_SUCCESS, LOAD_UNFOLLOWINGS_POSTS_FAILURE,
 } from '../reducers/post';
 
 import {
@@ -163,7 +166,6 @@ function* loadHashtagPosts(action) {
 }
 
 function loadPostAPI(data) {
-  // get으로 데이터전달은 쿼리스트링을 사용
   return axios.get(`/post/${data}`);
 }
 
@@ -252,6 +254,70 @@ function* addComment(action) {
   }
 }
 
+function updatePostAPI(data) {
+  return axios.patch(`/post/${data.postId}`, data);
+}
+
+function* updatePost(action) {
+  try {
+    const result = yield call(updatePostAPI, action.data);
+    yield put({
+      type: UPDATE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UPDATE_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function loadFollowingsPostsAPI(lastId) {
+  return axios.get(`/posts/related?lastId=${lastId || 0}`);
+}
+
+function* loadFollowingsPosts(action) {
+  try {
+    const result = yield call(loadFollowingsPostsAPI, action.lastId);
+    yield put({
+      type: LOAD_FOLLOWINGS_POSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_FOLLOWINGS_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function loadUnfollowingsPostsAPI(lastId) {
+  return axios.get(`/posts/unrelated?lastId=${lastId || 0}`);
+}
+
+function* loadUnfollowingsPosts(action) {
+  try {
+    const result = yield call(loadUnfollowingsPostsAPI, action.lastId);
+    yield put({
+      type: LOAD_UNFOLLOWINGS_POSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_UNFOLLOWINGS_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* watchUpdatePost() {
+  yield takeLatest(UPDATE_POST_REQUEST, updatePost);
+}
+
 function* watchRetweet() {
   yield takeLatest(RETWEET_REQUEST, retweet);
 }
@@ -296,8 +362,19 @@ function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
+function* watchLoadFollowingsPosts() {
+  yield takeLatest(LOAD_FOLLOWINGS_POSTS_REQUEST, loadFollowingsPosts);
+}
+
+function* watchLoadUnfollowingsPosts() {
+  yield takeLatest(LOAD_UNFOLLOWINGS_POSTS_REQUEST, loadUnfollowingsPosts);
+}
+
 export default function* postSaga() {
   yield all([
+    fork(watchLoadFollowingsPosts),
+    fork(watchLoadUnfollowingsPosts),
+    fork(watchUpdatePost),
     fork(watchRetweet),
     fork(watchUploadImages),
     fork(watchLikePost),

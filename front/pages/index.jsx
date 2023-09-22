@@ -1,11 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { END } from 'redux-saga';
 import axios from 'axios';
 
 import AppLayout from '../components/AppLayout';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
+import SelectFilter from '../components/SelectFilter';
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 import wrapper from '../store/configureStore';
@@ -17,6 +18,7 @@ const Home = () => {
   const hasMorePosts = useSelector(({ post }) => post.hasMorePosts);
   const loadPostsLoading = useSelector(({ post }) => post.loadPostsLoading);
   const retweetError = useSelector((state) => state.post.retweetError);
+  const [postFilter, setPostFilter] = useState(LOAD_POSTS_REQUEST);
 
   useEffect(() => {
     function onScroll() {
@@ -25,7 +27,7 @@ const Home = () => {
         if (hasMorePosts && !loadPostsLoading) {
           const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
-            type: LOAD_POSTS_REQUEST,
+            type: postFilter,
             lastId,
           });
         }
@@ -35,7 +37,7 @@ const Home = () => {
     return () => { // 이벤트 리스너 해제, 안 그러면 메모리에 쌓인다
       window.removeEventListener('scroll', onScroll);
     };
-  }, [hasMorePosts, loadPostsLoading, mainPosts.length]);
+  }, [hasMorePosts, loadPostsLoading, mainPosts.length, postFilter]);
 
   // 리트윗 에러 메시지
   useEffect(() => {
@@ -47,6 +49,7 @@ const Home = () => {
   return (
     <AppLayout>
       {me && <PostForm />}
+      <SelectFilter setPostFilter={setPostFilter} />
       {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
     </AppLayout>
   );

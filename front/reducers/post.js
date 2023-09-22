@@ -32,7 +32,18 @@ export const initialState = {
   retweetLoading: false,
   retweetDone: false,
   retweetError: null,
+  updatePostLoading: false,
+  updatePostDone: false,
+  updatePostError: null,
 };
+
+export const LOAD_FOLLOWINGS_POSTS_REQUEST = 'LOAD_FOLLOWINGS_POSTS_REQUEST';
+export const LOAD_FOLLOWINGS_POSTS_SUCCESS = 'LOAD_FOLLOWINGS_POSTS_SUCCESS';
+export const LOAD_FOLLOWINGS_POSTS_FAILURE = 'LOAD_FOLLOWINGS_POSTS_FAILURE';
+
+export const LOAD_UNFOLLOWINGS_POSTS_REQUEST = 'LOAD_UNFOLLOWINGS_POSTS_REQUEST';
+export const LOAD_UNFOLLOWINGS_POSTS_SUCCESS = 'LOAD_UNFOLLOWINGS_POSTS_SUCCESS';
+export const LOAD_UNFOLLOWINGS_POSTS_FAILURE = 'LOAD_UNFOLLOWINGS_POSTS_FAILURE';
 
 export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
 export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
@@ -78,15 +89,37 @@ export const RETWEET_REQUEST = 'RETWEET_REQUEST';
 export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
 export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
+export const UPDATE_POST_REQUEST = 'UPDATE_POST_REQUEST';
+export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
+export const UPDATE_POST_FAILURE = 'UPDATE_POST_FAILURE';
+
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
+export const REMOVE_MAINPOSTS = 'REMOVE_MAINPOSTS';
 
 // 이전 상태를 액션을 통해 다음 상태로 만드는 함수(불변성을 지키면서)
 const reducer = (state = initialState, action) => {
   // immer 사용: state 대신 draft
   return produce(state, (draft) => {
     switch (action.type) {
+      case REMOVE_MAINPOSTS:
+        draft.mainPosts = [];
+        break;
       case REMOVE_IMAGE:
         draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
+        break;
+      case UPDATE_POST_REQUEST:
+        draft.updatePostLoading = true;
+        draft.updatePostDone = false;
+        draft.updatePostError = null;
+        break;
+      case UPDATE_POST_SUCCESS:
+        draft.mainPosts.find((v) => v.id === action.data.PostId).content = action.data.content;
+        draft.updatePostLoading = false;
+        draft.updatePostDone = true;
+        break;
+      case UPDATE_POST_FAILURE:
+        draft.updatePostLoading = false;
+        draft.updatePostError = action.error;
         break;
       case RETWEET_REQUEST:
         draft.retweetLoading = true;
@@ -151,6 +184,8 @@ const reducer = (state = initialState, action) => {
       case LOAD_POSTS_REQUEST:
       case LOAD_USER_POSTS_REQUEST:
       case LOAD_HASHTAG_POSTS_REQUEST:
+      case LOAD_FOLLOWINGS_POSTS_REQUEST:
+      case LOAD_UNFOLLOWINGS_POSTS_REQUEST:
         draft.loadPostsLoading = true;
         draft.loadPostsDone = false;
         draft.loadPostsError = null;
@@ -158,6 +193,8 @@ const reducer = (state = initialState, action) => {
       case LOAD_POSTS_SUCCESS:
       case LOAD_USER_POSTS_SUCCESS:
       case LOAD_HASHTAG_POSTS_SUCCESS:
+      case LOAD_FOLLOWINGS_POSTS_SUCCESS:
+      case LOAD_UNFOLLOWINGS_POSTS_SUCCESS:
         draft.loadPostsLoading = false;
         draft.loadPostsDone = true;
         draft.mainPosts = draft.mainPosts.concat(action.data);
@@ -167,6 +204,8 @@ const reducer = (state = initialState, action) => {
       case LOAD_POSTS_FAILURE:
       case LOAD_USER_POSTS_FAILURE:
       case LOAD_HASHTAG_POSTS_FAILURE:
+      case LOAD_FOLLOWINGS_POSTS_FAILURE:
+      case LOAD_UNFOLLOWINGS_POSTS_FAILURE:
         draft.loadPostsLoading = false;
         draft.loadPostsError = action.error;
         break;

@@ -229,6 +229,32 @@ router.patch('/:postId/like', isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.patch('/:postId', isLoggedIn, async (req, res, next) => {
+  try {
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
+    await Post.update({
+      content: req.body.content,
+    }, {
+      where: {
+        id: req.body.postId,
+        UserId: req.user.id,
+      },
+    });
+    const post = await Post.findOne({ where:{ id :req.params.postId }});
+    if (hashtags) {
+      // 해시태그 없으면 create
+      const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({
+        where: { name: tag.slice(1).toLowerCase() },
+      }))); // result의 포맷 : [['해시', true], ['태그', true]]
+      await post.setHashtags(result.map((v) => v[0]));
+    }
+    res.status(200).json({PostId: Number(req.params.postId), content: req.body.content});
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({
