@@ -15,7 +15,7 @@ const PostForm = ({ editingPostId, content }) => {
   const [text, onChangeText, setText] = useInput(content || '');
 
   useEffect(() => {
-    if (addPostDone) {
+    if (addPostDone && !editingPostId) {
       setText(''); // addPost 성공하면 지우기
     }
   }, [addPostDone]);
