@@ -3,8 +3,9 @@ import { produce } from 'immer';
 export const initialState = {
   mainPosts: [],
   singlePost: null,
-  imagePaths: [],
   hasMorePosts: true,
+  imagePaths: [],
+  editingPostId: null,
   uploadImagesLoading: false,
   uploadImagesDone: false,
   uploadImagesError: null,
@@ -95,12 +96,22 @@ export const UPDATE_POST_FAILURE = 'UPDATE_POST_FAILURE';
 
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 export const REMOVE_MAINPOSTS = 'REMOVE_MAINPOSTS';
+export const CHANGE_EDIT_MODE = 'CHANGE_EDIT_MODE';
+export const CANCEL_EDIT_MODE = 'CANCEL_EDIT_MODE';
 
 // 이전 상태를 액션을 통해 다음 상태로 만드는 함수(불변성을 지키면서)
 const reducer = (state = initialState, action) => {
   // immer 사용: state 대신 draft
   return produce(state, (draft) => {
     switch (action.type) {
+      case CHANGE_EDIT_MODE:
+        draft.editingPostId = action.data.postId;
+        draft.imagePaths = action.data.imagePaths;
+        break;
+      case CANCEL_EDIT_MODE:
+        draft.editingPostId = null;
+        draft.imagePaths = [];
+        break;
       case REMOVE_MAINPOSTS:
         draft.mainPosts = [];
         break;
@@ -112,11 +123,15 @@ const reducer = (state = initialState, action) => {
         draft.updatePostDone = false;
         draft.updatePostError = null;
         break;
-      case UPDATE_POST_SUCCESS:
-        draft.mainPosts.find((v) => v.id === action.data.PostId).content = action.data.content;
+      case UPDATE_POST_SUCCESS: {
+        const postIndex = draft.mainPosts.findIndex((v) => v.id === action.data.id);
+        draft.mainPosts[postIndex] = action.data;
+        draft.editingPostId = null;
+        draft.imagePaths = [];
         draft.updatePostLoading = false;
         draft.updatePostDone = true;
         break;
+      }
       case UPDATE_POST_FAILURE:
         draft.updatePostLoading = false;
         draft.updatePostError = action.error;

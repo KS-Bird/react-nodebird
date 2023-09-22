@@ -15,7 +15,7 @@ import PostCardContent from './PostCardContent';
 import FollowButton from './FollowButton';
 import {
   REMOVE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST,
-  RETWEET_REQUEST, UPDATE_POST_REQUEST,
+  RETWEET_REQUEST, CHANGE_EDIT_MODE,
 } from '../reducers/post';
 
 dayjs.locale('ko');
@@ -26,7 +26,6 @@ const PostCard = ({ post }) => {
 
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const id = useSelector((state) => state.user.me?.id);
-  const [editMode, setEditMode] = useState(false);
 
   const onLike = useCallback(() => {
     if (!id) {
@@ -72,26 +71,18 @@ const PostCard = ({ post }) => {
     });
   }, [id]);
 
-  const onClickUpdate = useCallback(() => {
+  const onChangeEditMode = useCallback(() => {
     if (id !== post.UserId) {
-      return alert('글 작성자가 아닙니다.');
+      return alert('로그인이 필요합니다.');
     }
-    setEditMode(true);
-  }, [id]);
-
-  const onChangePost = useCallback((editText) => () => {
     dispatch({
-      type: UPDATE_POST_REQUEST,
+      type: CHANGE_EDIT_MODE,
       data: {
         postId: post.id,
-        content: editText,
+        imagePaths: post.Images.map((v) => v.src),
       },
     });
-  }, []);
-
-  const onCancelUpdatePost = useCallback(() => {
-    setEditMode(false);
-  }, []);
+  });
 
   const liked = post.Likers.find((v) => v.id === id);
   const removePostLoading = useSelector((state) => state.post.removePostLoading);
@@ -113,7 +104,7 @@ const PostCard = ({ post }) => {
                 {id === post.UserId
                   ? (
                     <>
-                      {!post.RetweetId && <Button onClick={onClickUpdate}>수정</Button>}
+                      {!post.RetweetId && <Button onClick={onChangeEditMode}>수정</Button>}
                       <Button
                         style={{ backgroundColor: 'tomato' }}
                         onClick={onRemovePost}
@@ -135,22 +126,23 @@ const PostCard = ({ post }) => {
       >
         {post.RetweetId && post.Retweet
           ? (
-            <Card cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}>
+            <Card
+              cover={post.Retweet.Images[0]
+                  && <PostImages images={post.Retweet.Images} />}
+            >
               <div style={{ float: 'right' }}>{dayjs(post.createdAt).fromNow()}</div>
               <Card.Meta
                 avatar={(
                   <Link href={`/user/${post.Retweet.User.id}`}>
                     <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar></a>
                   </Link>
-                )}
+                      )}
                 title={post.Retweet.User.nickname}
                 description={(
                   <PostCardContent
-                    onChangePost={onChangePost}
-                    onCancelUpdatePost={onCancelUpdatePost}
                     postData={post.Retweet.content}
                   />
-              )}
+                      )}
               />
             </Card>
           )
@@ -162,16 +154,13 @@ const PostCard = ({ post }) => {
                   <Link href={`/user/${post.User.id}`}>
                     <a><Avatar>{post.User.nickname[0]}</Avatar></a>
                   </Link>
-              )}
+                      )}
                 title={post.User.nickname}
                 description={(
                   <PostCardContent
-                    onChangePost={onChangePost}
                     postData={post.content}
-                    editMode={editMode}
-                    onCancelUpdatePost={onCancelUpdatePost}
                   />
-                )}
+                      )}
               />
             </>
           )}

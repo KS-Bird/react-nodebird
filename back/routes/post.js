@@ -229,32 +229,6 @@ router.patch('/:postId/like', isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.patch('/:postId', isLoggedIn, async (req, res, next) => {
-  try {
-    const hashtags = req.body.content.match(/#[^\s#]+/g);
-    await Post.update({
-      content: req.body.content,
-    }, {
-      where: {
-        id: req.body.postId,
-        UserId: req.user.id,
-      },
-    });
-    const post = await Post.findOne({ where:{ id :req.params.postId }});
-    if (hashtags) {
-      // 해시태그 없으면 create
-      const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({
-        where: { name: tag.slice(1).toLowerCase() },
-      }))); // result의 포맷 : [['해시', true], ['태그', true]]
-      await post.setHashtags(result.map((v) => v[0]));
-    }
-    res.status(200).json({PostId: Number(req.params.postId), content: req.body.content});
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
-
 router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({
@@ -270,6 +244,67 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
     next(error);
   }
 });
+
+router.put('/:postId', isLoggedIn, async (req, res, next) => {
+  try {
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
+    await Post.update({
+      content: req.body.content,
+    }, {
+      where: {
+        id: req.body.postId,
+        UserId: req.user.id,
+      },
+    });
+    const post = await Post.findOne({ where:{ id :req.body.postId }});
+    if (hashtags) {
+      // 해시태그 없으면 create
+      const result = await Promise.all(hashtags.map((tag) => Hashtag.findOrCreate({
+        where: { name: tag.slice(1).toLowerCase() },
+      }))); // result의 포맷 : [['해시', true], ['태그', true]]
+      await post.setHashtags(result.map((v) => v[0]));
+    }
+    if (req.body.image) { 
+      if (Array.isArray(req.body.image)) {  // 이미지 여러장
+        const images = await Promise.all(
+          req.body.image.map((image) => Image.findOrCreate({
+            where: { src: image },
+          }))
+        );
+        await post.setImages(images.map((v) => v[0]));
+      } else { // 이미지 한장
+        const image = await Image.findOrCreate({
+           where: { src: req.body.image },
+          });
+        await post.setImages(image[0]);
+      }
+    }
+    const fullPost = await Post.findOne({
+      where: { id: post.id },
+      include: [{
+        model: Comment, // 게시글의 댓글
+        include: [{
+          model: User, // 댓글 작성자
+          attributes: ['id', 'nickname'],
+        }],
+      }, { // 게시글 이미지
+        model: Image,
+      }, {
+        model: User, // 게시글 작성자
+        attributes: ['id', 'nickname'],
+      }, {
+        model: User, // 좋아요 누른사람
+        as: 'Likers',
+        attributes: ['id'],
+      }],
+    });
+    res.status(200).json(fullPost);  
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 
 router.get('/:postId', async (req, res, next) => {
   try {

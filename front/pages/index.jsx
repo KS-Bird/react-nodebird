@@ -18,6 +18,7 @@ const Home = () => {
   const hasMorePosts = useSelector(({ post }) => post.hasMorePosts);
   const loadPostsLoading = useSelector(({ post }) => post.loadPostsLoading);
   const retweetError = useSelector((state) => state.post.retweetError);
+  const editingPostId = useSelector((state) => state.post.editingPostId);
   const [postFilter, setPostFilter] = useState(LOAD_POSTS_REQUEST);
 
   useEffect(() => {
@@ -48,9 +49,11 @@ const Home = () => {
 
   return (
     <AppLayout>
-      {me && <PostForm />}
+      {me && !editingPostId && <PostForm />}
       <SelectFilter setPostFilter={setPostFilter} />
-      {mainPosts.map((post) => <PostCard key={post.id} post={post} />)}
+      {mainPosts.map((post) => (editingPostId !== post.id
+        ? <PostCard key={post.id} post={post} />
+        : <PostForm key={post.id} editingPostId={editingPostId} content={post.content} />))}
     </AppLayout>
   );
 };
